@@ -25,7 +25,7 @@ fn main() {
             //Ensure -p flag selected
             if args[2] == "-p" {
                 let blob: String = args[3].parse().unwrap();
-                cat_print(&blob.as_str());
+                let _ = cat_print(&blob.as_str());
             } else {
                 println!("No -p flag selected.")
             }
