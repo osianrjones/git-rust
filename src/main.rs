@@ -34,7 +34,8 @@ fn main() {
         "hash-object" => {
             if args[2] == "-w" {
                 if !(args[3].is_empty()) {
-                    hash_object(args[3])
+                    let result = hash_object(args[3].clone());
+                    println!("{}", result.unwrap());
                 } else {
                     println!("No path to file entered.")
                 }
@@ -86,9 +87,10 @@ fn cat_print(blob: &str) -> Result<(), std::io::Error> {
      Ok(())
 }
 
-fn hash_object(path: String) -> Result<(), std::io::Error> {
+fn hash_object(path: String) -> Result<String, std::io::Error> {
     //Open the path to the file
     let mut fileData = fs::read(&path)?;
+    let mut dataToWrite = fileData.clone();
     let mut buffer: Vec<u8> = Vec::new();
 
     //Create the blob for the hash
@@ -122,9 +124,7 @@ fn hash_object(path: String) -> Result<(), std::io::Error> {
     
     zlib_encoder.write_all(blob.as_bytes());
 
-    zlib_encoder.write_all(&fileData);
+    zlib_encoder.write_all(&dataToWrite);
 
-    println!("{}", hex::encode(hash));
-
-    Ok(())
+    Ok(hex::encode(hash))
 }
