@@ -23,7 +23,7 @@ fn main() {
         //$ git cat-file -p <blob_sha>
         "cat-file" => {
             //Ensure -p flag selected
-            if args[2] == "-p" {
+            if args.get(2) == Some(&String::from("-p")) {
                 let blob: String = args[3].parse().unwrap();
                 let _ = cat_print(&blob.as_str());
             } else {
@@ -32,7 +32,7 @@ fn main() {
         }
         //git hash-object -w /path/to/file
         "hash-object" => {
-            if args[2] == "-w" {
+            if args.get(2) == Some(&String::from("-w")) {
                 if !(args[3].is_empty()) {
                     let result = hash_object(args[3].clone());
                     println!("{}", result.unwrap());
@@ -41,6 +41,18 @@ fn main() {
                 }
             } else {
                 println!("No -w flag selected.")
+            }
+        }
+        "ls-tree" => {
+            if args.get(4) != None {
+                //"git ls-tree --name-only <tree-sha>"
+                if args.get(3) == Some(&String::from("--name-only")) {
+
+                } else {
+                    println!("No --name-only flag selected.")
+                }
+            } else {
+                //implement "git ls-tree <tree-sha>"
             }
         }
         _ => println!("Unknown command: {}", args[1])
